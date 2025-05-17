@@ -1,5 +1,6 @@
 package hellofx;
 
+import hellofx.utils.ColorUtils;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -14,28 +15,40 @@ public class Cube3D {
     private static final int GAP = 2;
     private static final int OFFSET = SIZE + GAP;
 
-    public Group createCube() {
+    public Group createCube(RubiksCube model) {
         Group group = new Group();
 
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    // Main cubelet
+
+                    if (x == 0 && y == 0 && z == 0) continue;
+
                     Box cubelet = new Box(SIZE, SIZE, SIZE);
+                    Group cubeletGroup = new Group(cubelet);
 
-                    // Create a group for the cubelet and its stickers
-                    Group cubeletGroup = new Group();
-                    cubeletGroup.getChildren().add(cubelet);
+                    // Safely mapped indices
+                    int iX = toIndex(x);
+                    int iY = toIndex(y);
+                    int iZ = toIndex(z);
+                    int iXInv = toIndex(-x);
+                    int iYInv = toIndex(-y);
+                    int iZInv = toIndex(-z);
 
-                    // Add face stickers (correct positions and rotations)
-                    if (x == 1) cubeletGroup.getChildren().add(createSticker(Color.RED, Rotate.Y_AXIS, 90));      // Right
-                    if (x == -1) cubeletGroup.getChildren().add(createSticker(Color.ORANGE, Rotate.Y_AXIS, -90)); // Left
-                    if (y == 1) cubeletGroup.getChildren().add(createSticker(Color.WHITE, Rotate.X_AXIS, -90));   // Up
-                    if (y == -1) cubeletGroup.getChildren().add(createSticker(Color.YELLOW, Rotate.X_AXIS, 90));  // Down
-                    if (z == 1) cubeletGroup.getChildren().add(createSticker(Color.GREEN, null, 0));              // Front
-                    if (z == -1) cubeletGroup.getChildren().add(createSticker(Color.BLUE, Rotate.Y_AXIS, 180));   // Back
+                    // Add stickers based on logical position
+                    if (x == 1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(5, iY, 2 - iZ)), Rotate.Y_AXIS, 90)); // R
+                    if (x == -1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(4, iY, iZ)), Rotate.Y_AXIS, -90)); // L
+                    if (y == 1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(0, 2 - iZ, iX)), Rotate.X_AXIS, -90)); // U
+                    if (y == -1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(1, iZ, iX)), Rotate.X_AXIS, 90)); // D
+                    if (z == 1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(2, 2 - iY, iX)), null, 0)); // F
+                    if (z == -1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(3, 2 - iY, 2 - iX)), Rotate.Y_AXIS, 180)); // B
 
-                    // Position the entire cubelet group in the cube
                     cubeletGroup.setTranslateX(x * OFFSET);
                     cubeletGroup.setTranslateY(y * OFFSET);
                     cubeletGroup.setTranslateZ(z * OFFSET);
@@ -54,8 +67,6 @@ public class Cube3D {
 
         Rectangle face = new Rectangle(stickerSize, stickerSize);
         face.setFill(color);
-
-        // Center the rectangle on its face
         face.setTranslateX(-stickerSize / 2);
         face.setTranslateY(-stickerSize / 2);
         face.setTranslateZ(faceOffset);
@@ -68,4 +79,8 @@ public class Cube3D {
 
         return faceGroup;
     }
-}
+
+    private int toIndex(int n) {
+        return Math.max(0, Math.min(2, n + 1)); // maps -1→0, 0→1, 1→2
+    }
+} 

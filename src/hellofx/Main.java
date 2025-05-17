@@ -17,8 +17,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Cube3D cube3D = new Cube3D();
-        Group cubeGroup = cube3D.createCube();
+    	RubiksCube model = new RubiksCube();
+    	Cube3D cube3D = new Cube3D();
+    	Group cubeGroup = cube3D.createCube(model);
 
         // Add lighting
         cubeGroup.getChildren().add(new AmbientLight(Color.WHITE));
@@ -61,6 +62,31 @@ public class Main extends Application {
 
             mouseOldX[0] = event.getSceneX();
             mouseOldY[0] = event.getSceneY();
+        });
+        
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case R -> {
+                    model.rotateFace('R'); // or scramble()
+                }
+                case L -> {
+                    model.rotateFace('L'); // or scramble()
+                }
+                case U -> {
+                    model.rotateFace('U'); // or scramble()
+                }
+                case D -> {
+                    model.rotateFace('D'); // or scramble()
+                }
+                case F -> {
+                    model.rotateFace('F'); // or scramble()
+                }
+                case B -> {
+                    model.rotateFace('B'); // or scramble()
+                }
+                default -> {}
+            }
+            cubeGroup.getChildren().setAll(cube3D.createCube(model).getChildren()); // refresh
         });
 
         primaryStage.setTitle("Rubik's Cube via Cube3D");
