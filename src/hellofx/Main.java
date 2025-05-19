@@ -67,22 +67,44 @@ public class Main extends Application {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case R -> {
-                    model.rotateFace('R'); // or scramble()
+                    model.rotateFace('R', true); // or scramble()
                 }
                 case L -> {
-                    model.rotateFace('L'); // or scramble()
+                    model.rotateFace('L', true); // or scramble()
                 }
                 case U -> {
-                    model.rotateFace('U'); // or scramble()
+                    model.rotateFace('U', true); // or scramble()
                 }
                 case D -> {
-                    model.rotateFace('D'); // or scramble()
+                    model.rotateFace('D', true); // or scramble()
                 }
                 case F -> {
-                    model.rotateFace('F'); // or scramble()
+                    model.rotateFace('F', true); // or scramble()
                 }
                 case B -> {
-                    model.rotateFace('B'); // or scramble()
+                    model.rotateFace('B', true); // or scramble()
+                }
+                
+                case E -> {
+                    model.rotateFace('R', false); // or scramble()
+                }
+                case K -> {
+                    model.rotateFace('L', false); // or scramble()
+                }
+                case Y -> {
+                    model.rotateFace('U', false); // or scramble()
+                }
+                case S -> {
+                    model.rotateFace('D', false); // or scramble()
+                }
+                case G -> {
+                    model.rotateFace('F', false); // or scramble()
+                }
+                case V -> {
+                    model.rotateFace('B', false); // or scramble()
+                }
+                case P -> {
+                    model.scramble(199); // or scramble()
                 }
                 default -> {}
             }

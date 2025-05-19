@@ -36,18 +36,30 @@ public class Cube3D {
                     int iZInv = toIndex(-z);
 
                     // Add stickers based on logical position
-                    if (x == 1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(5, iY, 2 - iZ)), Rotate.Y_AXIS, 90)); // R
-                    if (x == -1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(4, iY, iZ)), Rotate.Y_AXIS, -90)); // L
+                    // Face 0: U (y == 1)
                     if (y == 1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(0, 2 - iZ, iX)), Rotate.X_AXIS, -90)); // U
+                        ColorUtils.getJavaFXColor(model.getFacelet(0, iZ, iX)), Rotate.X_AXIS, -90));
+
+                    // Face 1: D (y == -1)
                     if (y == -1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(1, iZ, iX)), Rotate.X_AXIS, 90)); // D
+                        ColorUtils.getJavaFXColor(model.getFacelet(1, 2 - iZ, iX)), Rotate.X_AXIS, 90));
+
+                    // Face 2: F (z == 1)
                     if (z == 1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(2, 2 - iY, iX)), null, 0)); // F
+                        ColorUtils.getJavaFXColor(model.getFacelet(2, 2 - iY, iX)), null, 0));
+
+                    // Face 3: B (z == -1)
                     if (z == -1) cubeletGroup.getChildren().add(createSticker(
-                        ColorUtils.getJavaFXColor(model.getFacelet(3, 2 - iY, 2 - iX)), Rotate.Y_AXIS, 180)); // B
+                        ColorUtils.getJavaFXColor(model.getFacelet(3, 2 - iY, 2 - iX)), Rotate.Y_AXIS, 180));
+
+                    // Face 4: L (x == -1)
+                    if (x == -1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(4, 2 - iY, iZ)), Rotate.Y_AXIS, -90));
+
+                    // Face 5: R (x == 1)
+                    if (x == 1) cubeletGroup.getChildren().add(createSticker(
+                        ColorUtils.getJavaFXColor(model.getFacelet(5, 2 - iY, 2 - iZ)), Rotate.Y_AXIS, 90));
+
 
                     cubeletGroup.setTranslateX(x * OFFSET);
                     cubeletGroup.setTranslateY(y * OFFSET);

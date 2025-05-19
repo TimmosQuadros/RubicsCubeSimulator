@@ -42,24 +42,32 @@ public class RubiksCube {
     public void setFacelet(int face, int row, int col, String color) {
         cube[face][row][col] = color;
     }
+    
 
-    public void rotateFace(char face) {
+public void rotateFace(char face, boolean clockwise) {
+    if (clockwise) {
+        rotateFaceOnce(face);
+    } else {
+        // Rotate 3 times to simulate counterclockwise
+        for (int i = 0; i < 3; i++) {
+            rotateFaceOnce(face);
+        }
+    }
+}
+
+    public void rotateFaceOnce(char face) {
         String[] temp;
         switch (face) {
-            case 'U':
+            case 'D':
                 rotateFaceMatrix(0);
-                /*temp = cube[3][0].clone(); // F top
-                cube[3][0] = cube[5][0].clone(); // F <- R
-                cube[5][0] = cube[2][0].clone(); // R <- B
-                cube[2][0] = cube[4][0].clone(); // B <- L
-                cube[4][0] = temp; // L <- old F*/
-            	System.out.println("F top: " + Arrays.toString(cube[2][0]));
-            	System.out.println("R top: " + Arrays.toString(cube[5][0]));
-            	System.out.println("B top: " + Arrays.toString(cube[3][0]));
-            	System.out.println("L top: " + Arrays.toString(cube[4][0]));
+                temp = cube[2][0].clone(); // F top
+                cube[2][0] = cube[5][0].clone(); // F <- R
+                cube[5][0] = cube[3][0].clone(); // R <- B
+                cube[3][0] = cube[4][0].clone(); // B <- L
+                cube[4][0] = temp; // L <- old F
                 break;
 
-            case 'D':
+            case 'U':
                 rotateFaceMatrix(1);
                 temp = cube[2][2].clone(); // F bottom
                 cube[2][2] = cube[4][2].clone(); // F <- L
@@ -68,7 +76,7 @@ public class RubiksCube {
                 cube[5][2] = temp; // R <- old F
                 break;
 
-            case 'F':
+            case 'B':
                 rotateFaceMatrix(2);
                 temp = new String[]{cube[0][2][0], cube[0][2][1], cube[0][2][2]};
                 for (int i = 0; i < 3; i++) {
@@ -79,7 +87,7 @@ public class RubiksCube {
                 }
                 break;
 
-            case 'B':
+            case 'F':
                 rotateFaceMatrix(3);
                 temp = new String[]{cube[0][0][0], cube[0][0][1], cube[0][0][2]};
                 for (int i = 0; i < 3; i++) {
@@ -132,7 +140,7 @@ public class RubiksCube {
         Random rand = new Random();
         char[] faces = {'U', 'D', 'F', 'B', 'L', 'R'};
         for (int i = 0; i < moves; i++) {
-            rotateFace(faces[rand.nextInt(faces.length)]);
+            rotateFace(faces[rand.nextInt(faces.length)], false);
         }
     }
 }
