@@ -14,12 +14,16 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	
+	private RubiksCube model;
+	private Cube3D cube3D;
+	private Group cubeGroup;
 
     @Override
     public void start(Stage primaryStage) {
-    	RubiksCube model = new RubiksCube();
-    	Cube3D cube3D = new Cube3D();
-    	Group cubeGroup = cube3D.createCube(model);
+    	model = new RubiksCube();
+    	cube3D = new Cube3D();
+    	cubeGroup = cube3D.createCube(model);
 
         // Add lighting
         cubeGroup.getChildren().add(new AmbientLight(Color.WHITE));
@@ -64,6 +68,8 @@ public class Main extends Application {
             mouseOldY[0] = event.getSceneY();
         });
         
+        RubiksCubeSolver rubicCubeSolver = new RubiksCubeSolver(model, cube3D, cubeGroup);
+        
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case R -> {
@@ -95,7 +101,7 @@ public class Main extends Application {
                     model.rotateFace('U', false); // or scramble()
                 }
                 case S -> {
-                    model.rotateFace('D', false); // or scramble()
+                	model.scramble(199);
                 }
                 case G -> {
                     model.rotateFace('F', false); // or scramble()
@@ -104,16 +110,23 @@ public class Main extends Application {
                     model.rotateFace('B', false); // or scramble()
                 }
                 case P -> {
-                    model.scramble(199); // or scramble()
+                    //model.scramble(199); // or scramble()
+                	//model.scramble(100);
+                	rubicCubeSolver.solveYellowCrossAsync();
+                	//model.findWhiteEdges();
                 }
                 default -> {}
             }
-            cubeGroup.getChildren().setAll(cube3D.createCube(model).getChildren()); // refresh
+            refresh(); // refresh
         });
 
         primaryStage.setTitle("Rubik's Cube via Cube3D");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public void refresh() {
+    	cubeGroup.getChildren().setAll(cube3D.createCube(model).getChildren());
     }
 
     public static void main(String[] args) {

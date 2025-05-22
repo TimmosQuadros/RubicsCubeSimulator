@@ -1,11 +1,13 @@
 package hellofx;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RubiksCube {
     // Faces: 0=U, 1=D, 2=F, 3=B, 4=L, 5=R
     private final String[][][] cube = new String[6][3][3];
+    private final List<String> moveHistory = new ArrayList<>();
 
     private static final String[] COLORS = {
         "W", // U: White
@@ -53,6 +55,8 @@ public void rotateFace(char face, boolean clockwise) {
             rotateFaceOnce(face);
         }
     }
+    
+    moveHistory.add("" + face + (clockwise ? "" : "'"));
 }
 
     public void rotateFaceOnce(char face) {
@@ -142,5 +146,39 @@ public void rotateFace(char face, boolean clockwise) {
         for (int i = 0; i < moves; i++) {
             rotateFace(faces[rand.nextInt(faces.length)], false);
         }
+    }
+    
+    public void applyMoves(String moves) {
+        String[] tokens = moves.trim().split("\\s+");
+        for (String move : tokens) {
+            boolean clockwise = !move.endsWith("'");
+            char face = move.charAt(0);
+            rotateFace(face, clockwise);
+        }
+    }
+    
+    public void findWhiteEdges() {
+        System.out.println("Locating all white edge pieces:");
+        for (int face = 0; face < 6; face++) {
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 3; col++) {
+                    if (isEdgePosition(row, col) && getFacelet(face, row, col).equals("W")) {
+                        System.out.printf("White edge on face %d at position [%d][%d]%n", face, row, col);
+                    }
+                }
+            }
+        }
+    }
+    
+    private boolean isEdgePosition(int row, int col) {
+        return (row == 1 && col != 1) || (col == 1 && row != 1);
+    }
+
+    public List<String> getMoveHistory() {
+        return new ArrayList<>(moveHistory);
+    }
+
+    public void clearHistory() {
+        moveHistory.clear();
     }
 }
